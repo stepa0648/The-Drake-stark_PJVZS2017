@@ -1,20 +1,21 @@
 package stark.thedrake;
 
+import java.util.Iterator;
+
 /**
  *
  * @author severste
  */
-public class Board {
+public class Board implements Iterable<Tile> {
 
     private final int dimension;
     private final Tile[][] tiles;
     private final CapturedTroops capturedTroops;
 
-    // Konstruktor. Vytvoří čtvercovou hrací desku zadaného rozměru se specefikovanými dlaždicemi.
-    // Všechny ostatní dlažice se berou jako prázdné.
-    public Board(int dimension, Tile... tiles) {
+    // Primární konstruktor
+    public Board(int dimension, CapturedTroops captured, Tile... tiles) {
         this.dimension = dimension;
-        this.capturedTroops = new CapturedTroops();
+        this.capturedTroops = captured;
         this.tiles = new Tile[dimension][dimension];
 
         for (int row = 0; row < dimension; row++) {
@@ -27,6 +28,12 @@ public class Board {
             this.tiles[tile.position().i][tile.position().j] = tile;
         }
 
+    }
+
+    // Konstruktor. Vytvoří čtvercovou hrací desku zadaného rozměru se specefikovanými dlaždicemi.
+    // Všechny ostatní dlažice se berou jako prázdné.
+    public Board(int dimension, Tile... tiles) {
+        this(dimension, new CapturedTroops(), tiles);
     }
 
     public Board(Board old, CapturedTroops newCapturedTroops) {
@@ -138,7 +145,7 @@ public class Board {
  * a zajmout soupeřovu jednotku na pozici target?
      */
     public boolean canCaptureOnly(TilePosition origin, TilePosition target) {
-        if ( ! this.contains(origin) || ! this.contains(target)) {
+        if (!this.contains(origin) || !this.contains(target)) {
             return false;
         }
 
@@ -157,13 +164,13 @@ public class Board {
  * a zajmout tam soupeřovu jednotku?
      */
     public boolean canStepAndCapture(TilePosition origin, TilePosition target) {
-        if ( ! this.contains(origin) || ! this.contains(target)) {
+        if (!this.contains(origin) || !this.contains(target)) {
             return false;
         }
         if (!tileAt(origin).hasTroop()) {
             return false;
         }
-        
+
         if (!canCaptureOn(tileAt(origin).troop(), target) || !canTakeFrom(origin)) {
             return false;
         }
@@ -204,6 +211,35 @@ public class Board {
         TroopInfo info = targetTroop.info();
         PlayingSide side = targetTroop.side();
         return withCaptureAndTiles(info, side, new TroopTile(origin, tileAt(origin).troop().flipped()), new EmptyTile(target));
+    }
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return new Iterator<Tile>() {
+            //position Width
+            private int posW = 0;
+            //position Height
+            private int posH = 0;
+
+            @Override
+            public boolean hasNext() {
+                return (posW < dimension && posH < dimension);
+            }
+
+            @Override
+            public Tile next() {
+                Tile nextTile = tileAt(new TilePosition(posW, posH));
+
+                if (posW == dimension - 1) {
+                    posW = 0;
+                    posH++;
+                } else {
+                    posW++;
+                }
+
+                return nextTile;
+            }
+        };
     }
 
 }

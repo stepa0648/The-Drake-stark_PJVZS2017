@@ -1,9 +1,13 @@
 package stark.thedrake;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StandardDrakeSetup implements TheDrakeSetup {
+
+    Map<String, TroopInfo> troops;
 
     @Override
     public List<TroopInfo> troops() {
@@ -82,4 +86,23 @@ public class StandardDrakeSetup implements TheDrakeSetup {
                     new StrikeAction(-1, 1),
                     new StrikeAction(1, 1),
                     new StrikeAction(0, 2)));
+
+    @Override
+    public TroopInfo infoByName(String name) {
+        if (troops == null) {
+            troops = new HashMap<>();
+        }
+        troops.put("Drake", DRAKE);
+        troops.put("Clubman", CLUBMAN);
+        troops.put("Monk", MONK);
+        troops.put("Spearman", SPEARMAN);
+        troops.put("Archer", ARCHER);
+        troops.put("Swordsman", SWORDSMAN);
+
+        if (troops.containsKey(name)) {
+            return troops.get(name);
+        }
+
+        throw new IllegalArgumentException("Neznámá jednotka");
+    }
 }
