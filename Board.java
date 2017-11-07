@@ -132,12 +132,7 @@ public class Board implements Iterable<Tile> {
  * bez toho, aby tam zajala soupeřovu jednotku?
      */
     public boolean canStepOnly(TilePosition origin, TilePosition target) {
-
-        if (canTakeFrom(target) || !canTakeFrom(origin)) {
-            return false;
-        }
-
-        return true;
+        return contains(origin, target) && tileAt(origin).hasTroop() && !tileAt(target).hasTroop();
     }
 
     /*
@@ -145,7 +140,7 @@ public class Board implements Iterable<Tile> {
  * a zajmout soupeřovu jednotku na pozici target?
      */
     public boolean canCaptureOnly(TilePosition origin, TilePosition target) {
-        if (!this.contains(origin) || !this.contains(target)) {
+        if (!this.contains(origin, target)) {
             return false;
         }
 
@@ -164,7 +159,7 @@ public class Board implements Iterable<Tile> {
  * a zajmout tam soupeřovu jednotku?
      */
     public boolean canStepAndCapture(TilePosition origin, TilePosition target) {
-        if (!this.contains(origin) || !this.contains(target)) {
+        if (!this.contains(origin, target)) {
             return false;
         }
         if (!tileAt(origin).hasTroop()) {

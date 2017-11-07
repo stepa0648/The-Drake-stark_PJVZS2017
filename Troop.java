@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package stark.thedrake;
 
 import java.util.ArrayList;
@@ -57,11 +52,17 @@ public class Troop {
 
     // Všechny změny desky, které může jednotka provést na desce board, pokud stojí na pozici pos.
     public List<BoardChange> changesFrom(TilePosition pos, Board board) {
-        List<BoardChange> boardChange = new ArrayList<>();
-        for (TroopAction troopAction : board.tileAt(pos).troop().info().actions(face)) {
-            boardChange.addAll(troopAction.changesFrom(pos, side, board));
+
+        List<BoardChange> boardChanges = new ArrayList<>();
+
+        if (board.contains(pos)) {
+
+            for (TroopAction action : info().actions(face())) {
+                boardChanges.addAll(action.changesFrom(pos, side(), board));
+            }
         }
-        return boardChange;
+
+        return boardChanges;
     }
 
 }

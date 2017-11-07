@@ -22,31 +22,53 @@ public class MiddleGameState extends BaseGameState {
         return (BothLeadersPlaced) super.leaders();
     }
 
+    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
+ * v tomto stavu hry.
+     */
     @Override
     public List<Move> allMoves() {
         // Zde doplňte vlastní implementaci
         List<Move> allMoves = new ArrayList<>();
+
         allMoves.addAll(stackMoves());
+
         for (Tile tile : board()) {
             allMoves.addAll(boardMoves(tile.position()));
         }
         return allMoves;
     }
 
+    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
+ * z políčka na pozici position.
+     */
     @Override
     public List<Move> boardMoves(TilePosition position) {
         // Zde doplňte vlastní implementaci
         List<Move> boardMoves = new ArrayList<>();
+
         Board board = board();
+
+        if (!board.tileAt(position).hasTroop()) {
+            return boardMoves;
+        }
+
         Troop troop = board.tileAt(position).troop();
+
+        if (troop.side() != sideOnTurn()) {
+            return boardMoves;
+        }
+
         List<BoardChange> boardChanges = new ArrayList<>(troop.changesFrom(position, board));
+
         for (BoardChange change : boardChanges) {
             boardMoves.add(new BoardMove(this, change));
         }
-
         return boardMoves;
     }
 
+    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
+ * ze zásobníku.
+     */
     @Override
     public List<Move> stackMoves() {
         List<Move> result = new ArrayList<>();
@@ -68,15 +90,27 @@ public class MiddleGameState extends BaseGameState {
     public boolean canPlaceFromStack(TilePosition target) {
         // Zde doplňte vlastní implementaci
         Troop troop = troopStacks().peek(sideOnTurn());
+
         if (!board().canPlaceTo(troop, target)) {
             return false;
         }
-        for (Tile tile : board()) {
-            if (tile.position().isNextTo(target)) {
-                if (tile.hasTroop() && tile.troop().side() == sideOnTurn()) {
-                    return true;
-                }
+
+        //sousedi
+        List<TilePosition> positions = new ArrayList<>();
+        positions.add(new TilePosition(target.i - 1, target.j));
+        positions.add(new TilePosition(target.i + 1, target.j));
+        positions.add(new TilePosition(target.i, target.j - 1));
+        positions.add(new TilePosition(target.i, target.j + 1));
+
+        for (TilePosition pos : positions) {
+            if (!board().contains(pos)) {
+                continue;
             }
+            Tile tile = board().tileAt(pos);
+            if (tile.hasTroop() && tile.troop().side() == sideOnTurn()) {
+                return true;
+            }
+
         }
 
         return false;

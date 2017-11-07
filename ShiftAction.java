@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class ShiftAction implements TroopAction {
-
     private final Offset2D direction;
     private final Offset2D position;
 
@@ -23,21 +22,18 @@ public class ShiftAction implements TroopAction {
         TilePosition pos = origin.stepByPlayingSide(direction, side);
 
         // Check whether the path to the target is free
-        while (!target.equals(pos)) {
-            if (!board.canStepOnly(origin, pos)) {
+        while(!target.equals(pos)) {
+            if(!board.canStepOnly(origin, pos))
                 return Collections.emptyList();
-            }
         }
 
-        // if can step on the target tile 
-        if (board.canStepOnly(origin, pos)) {
+        // if can step on the target tile
+        if(board.canStepOnly(origin, pos))
             return Collections.singletonList(new StepOnly(board, origin, pos));
-        }
 
-        // if can capture on the target tile 
-        if (board.canStepAndCapture(origin, pos)) {
+        // if can capture on the target tile
+        if(board.canStepAndCapture(origin, pos))
             return Collections.singletonList(new StepAndCapture(board, origin, pos));
-        }
 
         return Collections.emptyList();
     }
