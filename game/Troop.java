@@ -1,68 +1,70 @@
 package stark.thedrake.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author severste
- */
-public class Troop {
+public class Troop
+{
+    private TroopInfo info ;
+    private PlayingSide side ;
+    private TroopFace face ;
 
-    private final TroopInfo info;
-    private final PlayingSide side;
-    private final TroopFace face;
-
-    // Vytvoří jednotku lícem nahoru
-    public Troop(TroopInfo info, PlayingSide side) {
-        this.info = info;
-        this.side = side;
+    //creates a troop facing upwards
+    public Troop( TroopInfo info, PlayingSide side )
+    {
+        this.info = info ;
+        this.side = side ;
         this.face = TroopFace.FRONT;
     }
-
-    public Troop(TroopInfo info, PlayingSide side, TroopFace face) {
-        this.info = info;
-        this.side = side;
-        this.face = face;
+//--------------------------------------------------------------------------------------------------
+    public Troop( TroopInfo info, PlayingSide side, TroopFace face )
+    {
+        this(info, side) ;
+        this.face = face ;
     }
-
-    public TroopInfo info() {
+//--------------------------------------------------------------------------------------------------
+    public TroopInfo info()
+    {
         return info;
     }
-
-    public PlayingSide side() {
+//--------------------------------------------------------------------------------------------------
+    public PlayingSide side() 
+    {
         return side;
     }
-
-    public TroopFace face() {
+//--------------------------------------------------------------------------------------------------
+    public TroopFace face()
+    {
         return face;
     }
-
-    public Offset2D pivot() {
-        return info.pivot(face);
+//--------------------------------------------------------------------------------------------------
+    public Offset2D pivot()
+    {
+        return info.pivot(face) ;
     }
+//--------------------------------------------------------------------------------------------------
+    public Troop flipped()
+    {
+        if ( face == TroopFace.FRONT )
+              return new Troop ( info, side, TroopFace.BACK );
 
-    public Troop flipped() {
-        if (face == TroopFace.BACK) {
-            return new Troop(info, side, TroopFace.FRONT);
-        } else {
-            return new Troop(info, side, TroopFace.BACK);
-        }
+        else return new Troop ( info, side, TroopFace.FRONT );
     }
+//--------------------------------------------------------------------------------------------------
+  //returns all possible Board changes that troop can do
+    public List<BoardChange> changesFrom(TilePosition pos, Board board )
+    {
+        List changes = new ArrayList<BoardChange>();
 
-    // Všechny změny desky, které může jednotka provést na desce board, pokud stojí na pozici pos.
-    public List<BoardChange> changesFrom(TilePosition pos, Board board) {
+        if ( ! board.contains( pos ) )
+            return  Collections.emptyList() ;
 
-        List<BoardChange> boardChanges = new ArrayList<>();
+        for ( TroopAction action : info().actions( face() ) )
+            changes.addAll(action.changesFrom( pos, side() , board ));
 
-        if (board.contains(pos)) {
-
-            for (TroopAction action : info().actions(face())) {
-                boardChanges.addAll(action.changesFrom(pos, side(), board));
-            }
-        }
-
-        return boardChanges;
+        return changes ;
     }
+//--------------------------------------------------------------------------------------------------
 
 }

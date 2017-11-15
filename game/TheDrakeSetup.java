@@ -2,10 +2,10 @@ package stark.thedrake.game;
 
 import java.util.List;
 
-public interface TheDrakeSetup {
+public interface TheDrakeSetup
+{
+	 List<TroopInfo> troops();
 
-    public List<TroopInfo> troops();
-
-    // Vrátí info jednotky podle jména jednotky
-    public TroopInfo infoByName(String name);
+	//returns info about troop by given key -- name
+	 TroopInfo infoByName(String name);
 }

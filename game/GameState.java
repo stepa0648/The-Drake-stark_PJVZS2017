@@ -1,25 +1,18 @@
 package stark.thedrake.game;
 
-import java.util.List;
 import stark.thedrake.media.GameStateMedia;
 
-public interface GameState {
+import java.util.List;
 
-    public Board board();
-
-    public TroopStacks troopStacks();
-
-    public PlayingSide sideOnTurn();
-
-    public Leaders leaders();
-
-    public boolean isVictory();
-
-    public List<Move> allMoves();
-
-    public List<Move> boardMoves(TilePosition position);
-
-    public List<Move> stackMoves();
-
-    public <T> T putToMedia(GameStateMedia<T> media);
+public interface GameState
+{
+    Board board();
+    TroopStacks troopStacks();
+    PlayingSide sideOnTurn();
+    Leaders leaders();
+    boolean isVictory();
+    List<Move> allMoves();
+    List<Move> boardMoves(TilePosition position);
+    List<Move> stackMoves();
+    <T> T putToMedia(GameStateMedia<T> media);
 }

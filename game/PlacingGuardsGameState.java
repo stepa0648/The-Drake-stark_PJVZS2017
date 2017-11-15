@@ -1,12 +1,13 @@
 package stark.thedrake.game;
 
+import stark.thedrake.media.GameStateMedia;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import stark.thedrake.media.GameStateMedia;
 
-public class PlacingGuardsGameState extends BaseGameState {
-
+public class PlacingGuardsGameState extends BaseGameState
+{
     private final int guardsCount;
 
     public PlacingGuardsGameState(
@@ -14,28 +15,30 @@ public class PlacingGuardsGameState extends BaseGameState {
             TroopStacks troopStacks,
             BothLeadersPlaced leaders,
             PlayingSide sideOnTurn,
-            int guardsCount) {
+            int guardsCount)
+        {
         super(board, troopStacks, leaders, sideOnTurn);
         this.guardsCount = guardsCount;
-    }
-
-    public int guardsCount() {
+        }
+//--------------------------------------------------------------------------------------------------
+    public int guardsCount()
+    {
         return guardsCount;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public BothLeadersPlaced leaders() {
-        return (BothLeadersPlaced) super.leaders();
+    public BothLeadersPlaced leaders()
+    {
+        return (BothLeadersPlaced)super.leaders();
     }
-
-    public boolean canPlaceGuard(Troop troop, TilePosition position) {
-        if (!board().canPlaceTo(troop, position)) {
+//--------------------------------------------------------------------------------------------------
+    public boolean canPlaceGuard(Troop troop, TilePosition position)
+    {
+        if(!board().canPlaceTo(troop, position))
             return false;
-        }
 
-        if (troop.side() != sideOnTurn()) {
+        if(troop.side() != sideOnTurn())
             return false;
-        }
 
         boolean hasLeaderAsNeigbour = false;
         hasLeaderAsNeigbour |= tryNeighbour(position, 0, 1);
@@ -45,9 +48,10 @@ public class PlacingGuardsGameState extends BaseGameState {
 
         return hasLeaderAsNeigbour;
     }
-
-    public GameState placeGuard(TilePosition position) {
-        if (guardsCount == 3) {
+//--------------------------------------------------------------------------------------------------
+    public GameState placeGuard(TilePosition position)
+    {
+        if(guardsCount == 3) {
             return new MiddleGameState(
                     board().withTiles(
                             new TroopTile(
@@ -57,7 +61,7 @@ public class PlacingGuardsGameState extends BaseGameState {
                     leaders(),
                     sideOnTurn().opposite());
         }
-
+//--------------------------------------------------------------------------------------------------
         return new PlacingGuardsGameState(
                 board().withTiles(
                         new TroopTile(
@@ -66,43 +70,51 @@ public class PlacingGuardsGameState extends BaseGameState {
                 troopStacks().pop(sideOnTurn()),
                 leaders(),
                 sideOnTurn().opposite(),
-                guardsCount + 1);
+                guardsCount+1);
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> allMoves() {
+    public List<Move> allMoves()
+    {
         return stackMoves();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> boardMoves(TilePosition position) {
+    public List<Move> boardMoves(TilePosition position)
+    {
         return Collections.emptyList();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> stackMoves() {
+    public List<Move> stackMoves()
+    {
         List<Move> result = new ArrayList<>();
         Troop troop = troopStacks().peek(sideOnTurn());
-        for (Tile tile : board()) {
-            if (canPlaceGuard(troop, tile.position())) {
+        for(Tile tile : board()) {
+            if(canPlaceGuard(troop, tile.position())) {
                 result.add(new PlaceGuard(this, tile.position()));
             }
         }
 
         return result;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public boolean isVictory() {
+    public boolean isVictory()
+    {
         return false;
     }
 
-    private boolean tryNeighbour(TilePosition origin, int xStep, int yStep) {
+    private boolean tryNeighbour(TilePosition origin, int xStep, int yStep)
+    {
         return origin.step(xStep, yStep).equals(leaders().position(sideOnTurn()));
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public <T> T putToMedia(GameStateMedia<T> media) {
+    public <T> T putToMedia(GameStateMedia<T> media)
+    {
         return media.putPlacingGuardsGameState(this);
     }
+//--------------------------------------------------------------------------------------------------
+
 }
