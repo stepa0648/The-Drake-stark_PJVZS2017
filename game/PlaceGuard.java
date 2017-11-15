@@ -1,23 +1,29 @@
 package stark.thedrake.game;
 
+
 public class PlaceGuard extends Move {
 
-    public PlaceGuard(PlacingGuardsGameState initialState, TilePosition target) {
+    public PlaceGuard(PlacingGuardsGameState initialState, TilePosition target)
+    {
         super(initialState, target);
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public PlacingGuardsGameState initialState() {
-        return (PlacingGuardsGameState) super.initialState();
+    public PlacingGuardsGameState initialState()
+    {
+        return (PlacingGuardsGameState)super.initialState();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public GameState resultState() {
+    public GameState resultState()
+    {
         return initialState().placeGuard(target());
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public boolean isWinning() {
+    public boolean isWinning()
+    {
         return false;
     }
+//--------------------------------------------------------------------------------------------------
 }

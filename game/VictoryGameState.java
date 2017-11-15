@@ -2,9 +2,11 @@ package stark.thedrake.game;
 
 import java.util.Collections;
 import java.util.List;
+
 import stark.thedrake.media.GameStateMedia;
 
-public class VictoryGameState extends BaseGameState {
+public class VictoryGameState extends BaseGameState
+{
 
     public VictoryGameState(
             Board board,
@@ -17,29 +19,35 @@ public class VictoryGameState extends BaseGameState {
                 leaders,
                 sideOnTurn);
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> allMoves() {
+    public List<Move> allMoves()
+    {
         return Collections.emptyList();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> boardMoves(TilePosition position) {
+    public List<Move> boardMoves(TilePosition position)
+    {
         return Collections.emptyList();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> stackMoves() {
+    public List<Move> stackMoves()
+    {
         return Collections.emptyList();
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public boolean isVictory() {
+    public boolean isVictory()
+    {
         return true;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public <T> T putToMedia(GameStateMedia<T> media) {
+    public <T> T putToMedia(GameStateMedia<T> media)
+    {
         return media.putFinishedGameState(this);
     }
+//--------------------------------------------------------------------------------------------------
 }

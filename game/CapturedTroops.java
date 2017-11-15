@@ -1,59 +1,57 @@
 package stark.thedrake.game;
 
+import stark.thedrake.media.CapturedTroopsMedia;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author severste
- */
-public class CapturedTroops {
-
-    private final List<TroopInfo> troopsOrange;
-    private final List<TroopInfo> troopsBlue;
-
-    public CapturedTroops() {
-        this.troopsOrange = new ArrayList<>();
-        this.troopsBlue = new ArrayList<>();
+public class CapturedTroops
+{
+    private final List<TroopInfo> blueSide ;
+    private final List<TroopInfo> orangeSide ;
+//--------------------------------------------------------------------------------------------------
+  //constructor creates class with emptyLists
+    public CapturedTroops()
+    {
+        this.blueSide =  Collections.emptyList();
+        this.orangeSide = Collections.emptyList();
     }
-
-    public CapturedTroops(List<TroopInfo> blueTroops,List<TroopInfo> orangeTroops) {
-        this.troopsOrange = new ArrayList(orangeTroops);
-        this.troopsBlue = new ArrayList(blueTroops);
+//--------------------------------------------------------------------------------------------------
+  //constructor with given captured troops for each side
+    public CapturedTroops( List<TroopInfo> blueSide, List<TroopInfo> orangeSide)
+    {
+        this.blueSide = new ArrayList(blueSide);
+        this.orangeSide = new ArrayList(orangeSide);
     }
+//--------------------------------------------------------------------------------------------------
+  //getter for captured troops
+    public List<TroopInfo> troops( PlayingSide side )
+    {
+        if ( side == PlayingSide.BLUE )
+            return Collections.unmodifiableList(this.blueSide);
 
-
-
-    public CapturedTroops(CapturedTroops troops, PlayingSide side, TroopInfo info) {
-        this.troopsBlue = new ArrayList(troops.troopsBlue);
-        this.troopsOrange = new ArrayList(troops.troopsOrange);
-
-        if (side == PlayingSide.BLUE) {
-            this.troopsBlue.add(info);
-        } else {
-            this.troopsOrange.add(info);
-        }
-
+        return Collections.unmodifiableList(this.orangeSide);
     }
+//--------------------------------------------------------------------------------------------------
+  //adds newly captured troop at a beggining of a list for given playing side
+    public CapturedTroops withTroop( PlayingSide side, TroopInfo info )
+    {
+        List<TroopInfo> newBlueTroops = new ArrayList<>(this.blueSide) ;
+        List<TroopInfo> newOrangeTroops = new ArrayList<>(this.orangeSide);
 
-    public List<TroopInfo> troops(PlayingSide side) {
-        if (side == PlayingSide.BLUE) {
-            return Collections.unmodifiableList(troopsBlue);
-        } else {
-            return Collections.unmodifiableList(troopsOrange);
-        }
+        if(side == PlayingSide.BLUE)
+            newBlueTroops.add(0, info);
+
+        else
+            newOrangeTroops.add(0, info);
+
+        return new CapturedTroops(newBlueTroops ,newOrangeTroops);
     }
-
-    public CapturedTroops withTroop(PlayingSide side, TroopInfo info) {
-        List<TroopInfo> newBlue = new ArrayList(this.troopsBlue);
-        List<TroopInfo> newOrange = new ArrayList(this.troopsOrange);
-        if(side == PlayingSide.BLUE){
-            newBlue.add(0, info);
-        }else{
-            newOrange.add(0, info);
-        }
-        return new CapturedTroops(newBlue, newOrange);
+//--------------------------------------------------------------------------------------------------
+    public <T> T putToMedia(CapturedTroopsMedia<T> media)
+    {
+        return media.putCapturedTroops(this);
     }
-
+//--------------------------------------------------------------------------------------------------
 }

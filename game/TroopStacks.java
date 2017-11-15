@@ -1,15 +1,14 @@
 package stark.thedrake.game;
 
-import java.util.List;
 import stark.thedrake.media.TroopStacksMedia;
 
-public interface TroopStacks {
+import java.util.List;
 
-    public Troop peek(PlayingSide side);
-
-    public TroopStacks pop(PlayingSide side);
-
-    public List<TroopInfo> troops(PlayingSide side);
-
-    public <T> T putToMedia(TroopStacksMedia<T> media);
+public interface TroopStacks
+{
+    Troop peek(PlayingSide side);
+    TroopStacks pop(PlayingSide side);
+    List<TroopInfo> troops(PlayingSide side);
+    <T> T putToMedia(TroopStacksMedia<T> media);
 }
+

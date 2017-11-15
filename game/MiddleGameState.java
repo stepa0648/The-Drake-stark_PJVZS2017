@@ -1,10 +1,12 @@
 package stark.thedrake.game;
 
-import java.util.ArrayList;
-import java.util.List;
 import stark.thedrake.media.GameStateMedia;
 
-public class MiddleGameState extends BaseGameState {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MiddleGameState extends BaseGameState
+{
 
     public MiddleGameState(
             Board board,
@@ -17,107 +19,108 @@ public class MiddleGameState extends BaseGameState {
                 leaders,
                 sideOnTurn);
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public BothLeadersPlaced leaders() {
-        return (BothLeadersPlaced) super.leaders();
+    public BothLeadersPlaced leaders()
+    {
+        return (BothLeadersPlaced)super.leaders();
     }
-
-    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
- * v tomto stavu hry.
-     */
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> allMoves() {
-        // Zde doplňte vlastní implementaci
-        List<Move> allMoves = new ArrayList<>();
+    public List<Move> allMoves()
+    {
+        List allMoves = new ArrayList<Move>() ;
+        allMoves.addAll( stackMoves() );
 
-        allMoves.addAll(stackMoves());
-
-        for (Tile tile : board()) {
+        for (Tile tile : board())
+        {
             allMoves.addAll(boardMoves(tile.position()));
         }
+
         return allMoves;
     }
-
-    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
- * z políčka na pozici position.
-     */
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> boardMoves(TilePosition position) {
-        // Zde doplňte vlastní implementaci
+    public List<Move> boardMoves(TilePosition position)
+    {
         List<Move> boardMoves = new ArrayList<>();
-
         Board board = board();
-
-        if (!board.tileAt(position).hasTroop()) {
+    //if there is no tile at position return empty arrList
+        if (!board.tileAt(position).hasTroop())
+        {
             return boardMoves;
         }
-
+    //if the troop at position is't troop of side that is on move, return empty arrList
         Troop troop = board.tileAt(position).troop();
 
-        if (troop.side() != sideOnTurn()) {
+        if (troop.side() != sideOnTurn())
+        {
             return boardMoves;
         }
-
+    //generate all changes that troop at position can make
         List<BoardChange> boardChanges = new ArrayList<>(troop.changesFrom(position, board));
-
-        for (BoardChange change : boardChanges) {
+        for (BoardChange change : boardChanges)
+        {
             boardMoves.add(new BoardMove(this, change));
         }
+
         return boardMoves;
     }
-
-    /* Všechny tahy, které může hráč, jenž je zrovna a tahu, provést
- * ze zásobníku.
-     */
+//--------------------------------------------------------------------------------------------------
     @Override
-    public List<Move> stackMoves() {
+    public List<Move> stackMoves()
+    {
         List<Move> result = new ArrayList<>();
-        Troop troop = troopStacks().peek(sideOnTurn());
-        for (Tile tile : board()) {
-            if (canPlaceFromStack(tile.position())) {
+        for (Tile tile : board())
+        {
+            if (canPlaceFromStack(tile.position()))
                 result.add(new PlaceFromStack(this, tile.position()));
-            }
+
         }
 
         return result;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public boolean isVictory() {
+    public boolean isVictory()
+    {
         return false;
     }
-
-    public boolean canPlaceFromStack(TilePosition target) {
-        // Zde doplňte vlastní implementaci
+//--------------------------------------------------------------------------------------------------
+    public boolean canPlaceFromStack(TilePosition target)
+    {
+      //troop to be placed
         Troop troop = troopStacks().peek(sideOnTurn());
 
-        if (!board().canPlaceTo(troop, target)) {
+      //can i place troop at position target?
+        if (!board().canPlaceTo(troop, target))
+        {
             return false;
         }
 
-        //sousedi
+      //neigbours, i can only place troop at target if it has neighbours on positions that colludes
+      //with target
         List<TilePosition> positions = new ArrayList<>();
         positions.add(new TilePosition(target.i - 1, target.j));
         positions.add(new TilePosition(target.i + 1, target.j));
         positions.add(new TilePosition(target.i, target.j - 1));
         positions.add(new TilePosition(target.i, target.j + 1));
 
-        for (TilePosition pos : positions) {
-            if (!board().contains(pos)) {
-                continue;
+        for (TilePosition pos : positions)
+        {
+            if ( board().contains(pos) )
+            {
+                Tile tile = board().tileAt(pos);
+                if (tile.hasTroop() && tile.troop().side() == sideOnTurn())
+                    return true ;
             }
-            Tile tile = board().tileAt(pos);
-            if (tile.hasTroop() && tile.troop().side() == sideOnTurn()) {
-                return true;
-            }
-
         }
 
         return false;
     }
-
-    public MiddleGameState placeFromStack(TilePosition target) {
+//--------------------------------------------------------------------------------------------------
+    public MiddleGameState placeFromStack(TilePosition target)
+    {
         Troop troop = troopStacks().peek(sideOnTurn());
         return new MiddleGameState(
                 board().withTiles(
@@ -126,9 +129,12 @@ public class MiddleGameState extends BaseGameState {
                 leaders(),
                 sideOnTurn().opposite());
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public <T> T putToMedia(GameStateMedia<T> media) {
+    public <T> T putToMedia(GameStateMedia<T> media)
+    {
         return media.putMiddleGameState(this);
     }
+//--------------------------------------------------------------------------------------------------
 }
+

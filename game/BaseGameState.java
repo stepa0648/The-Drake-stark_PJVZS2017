@@ -1,7 +1,7 @@
 package stark.thedrake.game;
 
-public abstract class BaseGameState implements GameState {
-
+public abstract class BaseGameState implements GameState
+{
     private final Board board;
     private final TroopStacks troopStacks;
     private final Leaders leaders;
@@ -17,24 +17,29 @@ public abstract class BaseGameState implements GameState {
         this.troopStacks = troopStacks;
         this.leaders = leaders;
         this.sideOnTurn = sideOnTurn;
-    }
-
-    public Board board() {
+    }   
+//--------------------------------------------------------------------------------------------------
+    public Board board()
+    {
         return board;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public TroopStacks troopStacks() {
+    public TroopStacks troopStacks()
+    {
         return troopStacks;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public Leaders leaders() {
+    public Leaders leaders()
+    {
         return leaders;
     }
-
+//--------------------------------------------------------------------------------------------------
     @Override
-    public PlayingSide sideOnTurn() {
+    public PlayingSide sideOnTurn()
+    {
         return sideOnTurn;
     }
+//--------------------------------------------------------------------------------------------------
 }
