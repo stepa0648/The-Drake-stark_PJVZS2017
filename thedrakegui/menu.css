@@ -1,0 +1,39 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 4.12.2017, 18:53:36
+    Author     : severste
+*/
+
+.scene{
+    -fx-background-image:url('res/bg.png');
+}
+
+.menuButton{
+    -fx-padding: 3 30 3 30;
+    -fx-background-color:  #02c0ff;
+    -fx-text-fill: white;
+    -fx-background-radius: 1em;
+
+}
+
+.menuButton:hover{
+    -fx-background-color:  #029bce;
+}
+
+.logo{
+    -fx-image: url('res/theDrakelogo.png');
+}
+
+.logoBox{
+    -fx-width: '50%';
+    -fx-alignment: center ;
+}
+
+.menuBox{
+    -fx-width: '50%';
+    -fx-alignment: center ;
+}

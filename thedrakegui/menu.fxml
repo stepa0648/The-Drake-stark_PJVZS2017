@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="scene" stylesheets="@menu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="thedrakegui.MenuController">
+   <children>
+      <VBox styleClass="logoBox">
+         <children>
+            <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_RIGHT" prefHeight="600.0" prefWidth="418.0" styleClass="menuBox">
+         <children>
+            <Button alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTwoPlayers" styleClass="menuButton" text="Hra dvou hráčů">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin></Button>
+            <Button mnemonicParsing="false" onAction="#onPCOpponent" styleClass="menuButton" text="Hra proti počítači">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin></Button>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onInternetOpponent" styleClass="menuButton" text="Hra po internetu">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin></Button>
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onEnd" styleClass="menuButton" text="Konec">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin></Button>
+         </children>
+      </VBox>
+   </children>
+</HBox>
